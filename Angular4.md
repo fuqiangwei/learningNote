@@ -6,6 +6,36 @@
 ## 搭建开发环境
   Angular-CLI、webpack
 ## 组件与指令
+### 数据绑定
+- 事件绑定:
+
+```Html
+<input (input)="onInputEvent($event)">
+
+```
+### HTML属性绑定
+#### 基本HTML属性绑定
+```html
+<td [attr.colspan]="tablecolspan">something</td>
+
+```
+
+#### css类绑定
+```html
+<!-- someExpression表达式会替换掉aaa bbb  -->
+<div class="aaa bbb" [class]="someExpression"></div>
+<!-- 如果isSpecial为true, 会添加ccc -->
+<div class="aaa bbb" [class.ccc]="isSpecial">something</div>
+
+<div [ngClass]="{aaa:isAAA, bbb: isBBB}">something</div>
+```
+#### 样式绑定
+
+```html
+<button [style.color]="isTrue ?'red' :'green'">red</button>
+<span [ngStyle]="{'font-style':this.canSave ? 'italic':'normal'}">something</span>
+```
+
 组件与指令、模板、数据绑定与事件绑定、组件间通讯、生命周期、动效、服务、管道
 ## 模块与共享模块
 ## 路由与动态加载
@@ -49,9 +79,21 @@
 
 > 依赖注入: DI `Dependency Injection`
 > 控制反转: IOC `Inversion Of Control`
-
+> 注入器: `constructor(private productService: ProductService){}`
+> 提供器: `providers: [ProductService]` 或`[{providers: ProductService, useClass: ProductService}]`
 
 ## 表单与数据校验
+### 模板式表单
+> 表单的数据模型是通过组件模板中的相关指令来定义的,因此使用这种方式定义表单的数据模型时,我们会受限于HTML语法,所以模板驱动的方式只适合用于一些简单的场景
+
+### 响应式表单
+> 通过编写`TypeScript`代码而不是Html代码来创建一个底层的数据模型,在这个模型定义好后,使用一些特定的指令,将模板上的HTML元素与底层的数据模型连接在一起.
+
+### 区别
+- 不管是哪种表单,都有一个对应的数据模型来存储表单的数据. 在模板式表单中,数据模型是由`angular`基于组件模板中的指令隐式创建的. 而在响应表单中,是通过编码明确的创建数据模型然后将模板上的`html`与底层的数据模型转接在一起
+- 数据模型并不是一个任意的对象, 它是一个由`angular/forms`模块中的一些特定的类, 如`FormControl`,`FormGroup`,`FormArray`等组成的. 在模板式表单中是能能直接访问到这些类的.
+- 响应式表单并不会替你生成`HTML`,模板仍然需要自己来编写
+
 ## 与服务端通讯
 Observable与RxJS
 ## i18n
