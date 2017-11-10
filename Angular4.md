@@ -5,7 +5,40 @@
 
 ## 搭建开发环境
   Angular-CLI、webpack
+
+### Angular-CLI 常用命令
+
+```bash
+ng new projectname -si --style=scss
+
+```
+
+
 ## 组件与指令
+### 组件必备三要素
+- 装饰器:`@component`-- 装饰器里面的属性就是元数据
+- 模板:`Template`
+- 控制器:`Control` 一个标准的typescript类,
+
+### 模块/MODULE
+```javascript
+import { BrowserModule } from '@angular/platform-browser';
+
+@NgModule({
+  declarations: [AppComponent], // 只能声名组件,指令,管道
+  imports: [BrowserModule,], // 启动该模块依赖的其它模块
+  providers: [], // 只能声名服务
+  bootstrap: [] // 声名模块的主组件
+})
+export class AppModule {}
+
+```
+
+### 引入第三方模块
+1. 安装第三方模块  `npm install jquery --save`
+2. 在`.angular-cli.json`引入    styles属性中引入css, scripts属性中引入js
+3. 安装类型类型描述文件  `npm install @types@jquery --save-dev`
+
 ### 数据绑定
 - 事件绑定:
 
@@ -13,12 +46,28 @@
 <input (input)="onInputEvent($event)">
 
 ```
+
 ### HTML属性绑定
+
 #### 基本HTML属性绑定
 ```html
-<td [attr.colspan]="tablecolspan">something</td>
 
+<td [attr.colspan]="tablecolspan">something</td>
+<button (click)="saved = true"></button>
+
+<!-- 属性绑定和插值表达式是一个东西 -->
+<img [src]="imgUrl">
+<img src="{{imgUrl}}">  
 ```
+#### html属性和DOM属性
+
+1. 少量html属性和DOM属性之间有1:1的关系, 比如ID
+2. 有些html属性没有对应的DOM属性,如colspan
+3. 有些DOM属性没能对应的HMTL属性, 比如textContent
+4. 就算名字相同, HTML属性和DOM属性也不是同一样东西
+5. HTML属性的值指定了初始值,DOM属性的值表示当前值. DOM属性的值可以改变,HTML属性的值不能改变
+6. 模板绑定是通过DOM属性和事件绑定来工作的, 而不是HMTL属性
+
 
 #### css类绑定
 ```html
@@ -37,31 +86,43 @@
 ```
 
 组件与指令、模板、数据绑定与事件绑定、组件间通讯、生命周期、动效、服务、管道
+
 ## 模块与共享模块
+
 ## 路由与动态加载
+
 ### Route 导航
   - Routes: 路由配置, 保存着哪个URL对应展示哪个组件,以及在哪个`RouterOutlet`中展示组件
   - RouterOutlet: 在Html中标记路由内容呈现位置的占位符指令
   - Router: 负责在运行时执行路由的对象, 可以通过调用其`navigate()`和`navigateByUrl()`方法来导航到一个指定的路由
   - RouterLink: 在HTML中声明路由导航用的指令,参数是数组
   - ActivateRoute: 当前激活的路由对角,保存着当前路由的信息,如路由地址,
+
 ### 路由传递数据
   - 查询参数: `/product?id=1&name=2`   => `ActivatedRoute.queryParams[id]`
   - 路由路径: `{path/product/:id}` => `ActivateddRoute.queryParams[id]`
   - 路由配置: `{path:/product, component:ProductComponent, data:[{isProd:true}]}` => `ActivatedRoute.data[0][isProd]`
 ### 路由重定向和子路由和辅助路由
-#### 辅助路由
+
+`{path:'',component:XxxComponent,redirectTo: 'xxx',pathMatch: 'full'}`
+
+### 辅助路由
 
 ```html
 <router-outlet></router-outlet>
 <router-outlet name="aux"></router-outlet>
 
-{path:'xxx',component:XxxComponent, outlet:"aux"}
-{path:'yyy',component:YyyComponent, outlet:"aux"}
 
-<a [routerLink] = "['/home', {outlets: {aux: 'xxx'}}]">xxx</a>
+
+<a [routerLink] = "['/home', {outlets: {primary:'home', aux: 'xxx'}}]">xxx</a>
 <a [routerLink] = "['/product', {outlets: {aux: 'yyy'}}]">yyy</a>
 
+```
+```javascript
+const route: Routes = [
+  {path:'xxx',component:XxxComponent, outlet:"aux", canActivate:[路由守卫],canDeactivate:[路由守卫],Resolve:{data:dataResolve}},
+  {path:'yyy',component:YyyComponent, outlet:"aux"}
+]
 ```
 #### 路由守卫
 
@@ -82,7 +143,7 @@
 > 注入器: `constructor(private productService: ProductService){}`
 > 提供器: `providers: [ProductService]` 或`[{providers: ProductService, useClass: ProductService}]`
 
-## 表单与数据校验
+## 表单与数据校验    
 ### 模板式表单
 > 表单的数据模型是通过组件模板中的相关指令来定义的,因此使用这种方式定义表单的数据模型时,我们会受限于HTML语法,所以模板驱动的方式只适合用于一些简单的场景
 
@@ -100,3 +161,10 @@ Observable与RxJS
 ## 前端自动化测试
 ## 高阶内容
 WebWorker、ServiceWorker、SEO与Universal、ionic、PWA
+
+## 常用工具
+
+1. [组件树生成器][53f65de5]
+2. «»
+
+  [53f65de5]: https://github.com/compodoc/ngd/ "组件树生成器"
